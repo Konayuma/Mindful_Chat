@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
-import 'screens/chat_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'screens/signup_screen.dart';
+import 'screens/signin_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Firebase
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    print('✅ Firebase initialized successfully');
+  } catch (e) {
+    print('❌ Firebase initialization error: $e');
+  }
+  
   runApp(const MentalHealthApp());
 }
 
@@ -72,7 +87,7 @@ class WelcomeScreen extends StatelessWidget {
                         width: 251,
                         height: 44,
                         child: OutlinedButton(
-                          onPressed: () => _showComingSoon(context),
+                          onPressed: () => _navigateToSignIn(context),
                           style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: Colors.black,
@@ -97,7 +112,7 @@ class WelcomeScreen extends StatelessWidget {
                         width: 251,
                         height: 44,
                         child: ElevatedButton(
-                          onPressed: () => _navigateToChat(context),
+                          onPressed: () => _navigateToSignUp(context),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black,
                             foregroundColor: Colors.white,
@@ -169,11 +184,20 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  void _navigateToChat(BuildContext context) {
+  void _navigateToSignUp(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const ChatScreen(),
+        builder: (context) => const SignUpScreen(),
+      ),
+    );
+  }
+
+  void _navigateToSignIn(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SignInScreen(),
       ),
     );
   }

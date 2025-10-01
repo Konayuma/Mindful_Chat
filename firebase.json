@@ -1,0 +1,29 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "mindfulchatproject",
+          "appId": "1:219834135889:android:c244cba7bca3ecabb04f70",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "mindfulchatproject",
+          "configurations": {
+            "android": "1:219834135889:android:c244cba7bca3ecabb04f70",
+            "ios": "1:219834135889:ios:a1d26e79fbe06923b04f70",
+            "macos": "1:219834135889:ios:a1d26e79fbe06923b04f70",
+            "web": "1:219834135889:web:84ba54a54db45936b04f70",
+            "windows": "1:219834135889:web:c81815fc704b2a84b04f70"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}

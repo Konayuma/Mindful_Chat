@@ -47,23 +47,13 @@
 	-->
 
 - [x] Customize the Project
-	<!--
-	Verify that all previous steps have been completed successfully and you have marked the step as completed.
-	Develop a plan to modify codebase according to user requirements.
-	Apply modifications using appropriate tools and user-provided references.
-	Skip this step for "Hello World" projects.
-	-->
+	<!-- Completed: Authentication flow screens created from Figma designs, Firebase backend implemented -->
 
-- [ ] Install Required Extensions
-	<!-- ONLY install extensions provided mentioned in the get_project_setup_info. Skip this step otherwise and mark as completed. -->
+- [x] Install Required Extensions
+	<!-- No extensions required for Flutter project -->
 
-- [ ] Compile the Project
-	<!--
-	Verify that all previous steps have been completed.
-	Install any missing dependencies.
-	Run diagnostics and resolve any issues.
-	Check for markdown files in project folder for relevant instructions on how to do this.
-	-->
+- [x] Compile the Project
+	<!-- All screens compile successfully with no errors -->
 
 - [ ] Create and Run Task
 	<!--

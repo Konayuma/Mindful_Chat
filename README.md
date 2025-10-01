@@ -1,41 +1,105 @@
 # Mental Health App
 
-A Flutter mobile application designed to support mental health and wellness. This app provides tools for mood tracking, meditation, journaling, and accessing mental health resources.
+A Flutter mobile application designed to support mental health and wellness. This app provides tools for mood tracking, meditation, journaling, and accessing mental health resources with AI-powered chat support.
 
 ## Features
 
+- **AI Chat Support**: Conversational AI assistant for mental health support
+- **User Authentication**: Secure email/password and Google sign-in
 - **Mood Tracker**: Track your daily mood and emotional well-being
-- **Meditation**: Access guided meditation sessions and mindfulness exercises
-- **Journal**: Digital journaling for reflection and self-expression
-- **Resources**: Access to mental health resources and support information
+- **Journal**: Digital journaling for reflection and self-expression with cloud sync
+- **Data Persistence**: All data securely stored in Firebase Firestore
+- **Real-time Sync**: Access your data across devices
 
-## Getting Started
+## 🚀 Quick Start
 
-### Prerequisites
+### 1. Prerequisites
 
 - Flutter SDK (version 3.6.0 or higher)
 - Dart SDK
+- **Node.js** (for Firebase CLI)
 - An IDE (VS Code, Android Studio, or IntelliJ IDEA)
 
-### Installation
+### 2. Installation
 
 1. Clone this repository:
-   ```
+   ```bash
    git clone <repository-url>
    cd MentalHealth
    ```
 
 2. Install dependencies:
-   ```
+   ```bash
    flutter pub get
    ```
 
-3. Run the app:
-   ```
+3. **Set up Firebase** (Required):
+   - See `QUICKSTART.md` for detailed Firebase setup instructions
+   - Install Node.js from https://nodejs.org/
+   - Install Firebase CLI: `npm install -g firebase-tools`
+   - Run: `flutterfire configure`
+
+4. Run the app:
+   ```bash
    flutter run
    ```
 
-### Available Platforms
+## 📋 Firebase Setup (IMPORTANT)
+
+This app requires Firebase for authentication and data storage. Follow these steps:
+
+1. **Install Firebase CLI**:
+   ```bash
+   npm install -g firebase-tools
+   ```
+
+2. **Login to Firebase**:
+   ```bash
+   firebase login
+   ```
+
+3. **Configure Firebase for Flutter**:
+   ```bash
+   flutterfire configure
+   ```
+
+4. **Enable Authentication** in Firebase Console:
+   - Go to Authentication → Get Started
+   - Enable Email/Password authentication
+
+5. **Create Firestore Database**:
+   - Go to Firestore Database → Create Database
+   - Start in test mode (for development)
+
+For detailed instructions, see **QUICKSTART.md**
+
+## 🏗️ Architecture
+
+### Backend Services
+
+- **AuthService** (`lib/services/auth_service.dart`):
+  - User authentication (sign up, sign in, sign out)
+  - Password management
+  - Email verification
+
+- **FirestoreService** (`lib/services/firestore_service.dart`):
+  - User profile management
+  - Conversation and message storage
+  - Mood tracking data
+  - Journal entries
+
+### Database Structure
+
+```
+Firestore Collections:
+├── users/              # User profiles and settings
+├── conversations/      # Chat conversation metadata
+├── messages/          # Individual chat messages
+├── mood_entries/      # Mood tracking data
+└── journal_entries/   # Personal journal entries
+```
+
+## 📱 Available Platforms
 
 This app supports:
 - Android
