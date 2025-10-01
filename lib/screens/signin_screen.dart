@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import '../services/auth_service.dart';
+import '../services/supabase_auth_service.dart';
 import 'chat_screen.dart';
 import 'signup_screen.dart';
 
@@ -51,7 +51,8 @@ class _SignInScreenState extends State<SignInScreen> {
     setState(() => _isLoading = true);
 
     try {
-      await AuthService().signInWithEmail(
+      // Supabase Auth
+      await SupabaseAuthService.instance.signInWithEmail(
         email: email,
         password: password,
       );

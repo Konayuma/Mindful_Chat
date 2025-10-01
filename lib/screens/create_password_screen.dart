@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'chat_screen.dart';
-import '../services/auth_service.dart';
+import 'safety_note_screen.dart';
+import '../services/supabase_auth_service.dart';
 
 class CreatePasswordScreen extends StatefulWidget {
   final String email;
@@ -115,28 +115,26 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
     setState(() => _isLoading = true);
     
     try {
-      // Create user account with Firebase Auth
-      await AuthService().signUpWithEmail(
-        email: widget.email,
-        password: password,
-      );
+      // User is already signed in via OTP verification
+      // Now we just need to set their permanent password
+      await SupabaseAuthService.instance.updatePassword(password);
       
       if (mounted) {
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Welcome to Mindful Chat, ${widget.email}!'),
+            content: Text('Welcome to Mindful Chat, ${widget.email}! 🎉'),
             backgroundColor: Colors.green,
           ),
         );
         
-        // Navigate to chat screen
-        Future.delayed(const Duration(seconds: 1), () {
+        // Navigate to safety note screen (onboarding)
+        Future.delayed(const Duration(milliseconds: 800), () {
           if (mounted) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const ChatScreen(),
+                builder: (context) => const SafetyNoteScreen(),
               ),
             );
           }
@@ -147,7 +145,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
         setState(() => _isLoading = false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to create account: $e'),
+            content: Text('Failed to set password: $e'),
             backgroundColor: Colors.red,
           ),
         );

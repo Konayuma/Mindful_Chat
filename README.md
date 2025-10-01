@@ -2,25 +2,34 @@
 
 A Flutter mobile application designed to support mental health and wellness. This app provides tools for mood tracking, meditation, journaling, and accessing mental health resources with AI-powered chat support.
 
-## Features
+## ✨ Features
 
 - **AI Chat Support**: Conversational AI assistant for mental health support
-- **User Authentication**: Secure email/password and Google sign-in
+- **User Authentication**: Secure email/password authentication with Supabase
 - **Mood Tracker**: Track your daily mood and emotional well-being
-- **Journal**: Digital journaling for reflection and self-expression with cloud sync
-- **Data Persistence**: All data securely stored in Firebase Firestore
-- **Real-time Sync**: Access your data across devices
+- **Journal**: Digital journaling for reflection and self-expression
+- **Data Persistence**: All data securely stored in Supabase (PostgreSQL)
+- **Real-time Sync**: Access your data across devices with real-time updates
+- **Row Level Security**: Your data is protected and only accessible by you
+
+## 🔧 Tech Stack
+
+- **Frontend**: Flutter 3.6.0+
+- **Backend**: Supabase (PostgreSQL database)
+- **Authentication**: Supabase Auth
+- **Database**: PostgreSQL with Row Level Security (RLS)
+- **Real-time**: Supabase Real-time subscriptions
 
 ## 🚀 Quick Start
 
-### 1. Prerequisites
+### Prerequisites
 
 - Flutter SDK (version 3.6.0 or higher)
 - Dart SDK
-- **Node.js** (for Firebase CLI)
+- Supabase account (free tier available)
 - An IDE (VS Code, Android Studio, or IntelliJ IDEA)
 
-### 2. Installation
+### Installation
 
 1. Clone this repository:
    ```bash
@@ -33,71 +42,86 @@ A Flutter mobile application designed to support mental health and wellness. Thi
    flutter pub get
    ```
 
-3. **Set up Firebase** (Required):
-   - See `QUICKSTART.md` for detailed Firebase setup instructions
-   - Install Node.js from https://nodejs.org/
-   - Install Firebase CLI: `npm install -g firebase-tools`
-   - Run: `flutterfire configure`
+3. **Set up Supabase** (Required - One-time setup):
+   
+   a. Create a Supabase project at https://supabase.com
+   
+   b. Copy your credentials to `.env` file:
+      ```bash
+      SUPABASE_URL=https://your-project.supabase.co
+      SUPABASE_ANON_KEY=your-anon-key-here
+      ```
+   
+   c. Run database schema:
+      - Open Supabase Dashboard → SQL Editor
+      - Copy all content from `supabase_schema.sql`
+      - Paste and run in SQL Editor
+      - Wait for "Success. No rows returned"
+   
+   📖 **Detailed guide**: See `QUICK_START.md`
 
 4. Run the app:
    ```bash
    flutter run
    ```
 
-## 📋 Firebase Setup (IMPORTANT)
+## 📋 Database Setup (IMPORTANT)
 
-This app requires Firebase for authentication and data storage. Follow these steps:
+**REQUIRED BEFORE FIRST RUN:**
 
-1. **Install Firebase CLI**:
-   ```bash
-   npm install -g firebase-tools
-   ```
+This app uses Supabase (PostgreSQL) for data storage. You must run the database schema once:
 
-2. **Login to Firebase**:
-   ```bash
-   firebase login
-   ```
+### Quick Setup:
+1. Go to your Supabase Dashboard
+2. Click "SQL Editor" → "New query"
+3. Open `supabase_schema.sql` in VS Code
+4. Copy all SQL code and paste into Supabase
+5. Click "Run"
 
-3. **Configure Firebase for Flutter**:
-   ```bash
-   flutterfire configure
-   ```
+This creates:
+- ✅ Database tables (users, conversations, messages, mood_entries, journal_entries)
+- ✅ Row Level Security policies
+- ✅ Automatic triggers
+- ✅ Performance indexes
 
-4. **Enable Authentication** in Firebase Console:
-   - Go to Authentication → Get Started
-   - Enable Email/Password authentication
-
-5. **Create Firestore Database**:
-   - Go to Firestore Database → Create Database
-   - Start in test mode (for development)
-
-For detailed instructions, see **QUICKSTART.md**
+📖 **See `QUICK_START.md` for detailed instructions**
 
 ## 🏗️ Architecture
 
 ### Backend Services
 
-- **AuthService** (`lib/services/auth_service.dart`):
-  - User authentication (sign up, sign in, sign out)
-  - Password management
-  - Email verification
+- **SupabaseService** (`lib/services/supabase_service.dart`):
+  - Main Supabase client singleton
+  - Environment configuration
+  - Helper methods for auth status
 
-- **FirestoreService** (`lib/services/firestore_service.dart`):
+- **SupabaseAuthService** (`lib/services/supabase_auth_service.dart`):
+  - User authentication (sign up, sign in, sign out)
+  - Password management (reset, update)
+  - Email updates
+  - Auth state change streams
+
+- **SupabaseDatabaseService** (`lib/services/supabase_database_service.dart`):
   - User profile management
-  - Conversation and message storage
+  - Conversation and message storage with real-time updates
   - Mood tracking data
   - Journal entries
+  - All CRUD operations
 
 ### Database Structure
 
 ```
-Firestore Collections:
-├── users/              # User profiles and settings
-├── conversations/      # Chat conversation metadata
-├── messages/          # Individual chat messages
-├── mood_entries/      # Mood tracking data
-└── journal_entries/   # Personal journal entries
+PostgreSQL Tables (with Row Level Security):
+├── users              # User profiles and settings
+├── conversations      # Chat conversation metadata
+├── messages           # Individual chat messages
+├── mood_entries       # Mood tracking data with timestamps
+└── journal_entries    # Personal journal entries with rich text
 ```
+
+**Security**: All tables have Row Level Security (RLS) policies. Users can only access their own data.
+
+**Real-time**: Uses Supabase Real-time for live updates on conversations and messages.
 
 ## 📱 Available Platforms
 
@@ -110,6 +134,41 @@ This app supports:
 - Linux (Desktop)
 
 ## Development
+
+### Running Tests
+
+## 📂 Project Structure
+
+```
+lib/
+├── main.dart                              # App entry point with Supabase init
+├── screens/
+│   ├── signin_screen.dart                 # Sign-in screen
+│   ├── signup_screen.dart                 # Sign-up flow
+│   ├── create_password_screen.dart        # Password creation
+│   └── chat_screen.dart                   # AI chat interface
+└── services/
+    ├── supabase_service.dart              # Main Supabase client
+    ├── supabase_auth_service.dart         # Authentication service
+    ├── supabase_database_service.dart     # Database operations
+    └── api_service.dart                   # External API calls
+
+.env                                        # Environment variables (not in git)
+.env.example                                # Template for .env
+supabase_schema.sql                         # Database schema
+QUICK_START.md                              # Quick start guide
+MIGRATION_COMPLETE.md                       # Migration details
+```
+
+## 📚 Documentation
+
+- **`QUICK_START.md`** - Fast track to running the app
+- **`MIGRATION_COMPLETE.md`** - Complete migration details and features
+- **`SUPABASE_MIGRATION.md`** - Full migration guide
+- **`SUPABASE_QUICKSTART.md`** - Supabase quick reference
+- **`supabase_schema.sql`** - Database schema with comments
+
+## 🧪 Development
 
 ### Running Tests
 
@@ -135,27 +194,7 @@ For iOS:
 flutter build ios
 ```
 
-For Windows:
-```bash
-flutter build windows
-```
-
-## Project Structure
-
-```
-lib/
-  main.dart          # Main application entry point
-test/
-  widget_test.dart   # Widget tests
-android/             # Android-specific files
-ios/                 # iOS-specific files
-windows/             # Windows-specific files
-macos/               # macOS-specific files
-linux/               # Linux-specific files
-web/                 # Web-specific files
-```
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch

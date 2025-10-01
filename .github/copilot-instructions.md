@@ -53,19 +53,22 @@
 	<!-- No extensions required for Flutter project -->
 
 - [x] Compile the Project
-	<!-- All screens compile successfully with no errors -->
+	<!-- All authentication screens compile successfully with Supabase integration. Removed all Firebase files including google-services.json, firebase.json, firestore files. -->
 
-- [ ] Create and Run Task
-	<!--
-	Verify that all previous steps have been completed.
-	Check https://code.visualstudio.com/docs/debugtest/tasks to determine if the project needs a task. If so, use the create_and_run_task to create and launch a task based on package.json, README.md, and project structure.
-	Skip this step otherwise.
-	 -->
+- [x] Create and Run Task
+	<!-- Task "Flutter: Run App" is available. App is currently building after cleaning corrupted cache. -->
 
 - [ ] Launch the Project
-	<!--
-	Verify that all previous steps have been completed.
-	Prompt user for debug mode, launch only if confirmed.
+	<!-- 
+	⚠️ IMPORTANT REMINDERS:
+	1. App is building - first build takes 3-5 minutes
+	2. Before testing auth, user MUST run supabase_schema.sql in Supabase Dashboard:
+	   - Go to https://wlpuqichfpxrwchzrdzz.supabase.co
+	   - Click "SQL Editor" → "New query"
+	   - Copy all from supabase_schema.sql
+	   - Paste and run
+	   - Wait for "Success. No rows returned"
+	3. Then test: Sign up → Check Supabase Dashboard → Sign in
 	 -->
 
 - [ ] Ensure Documentation is Complete

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
-import 'dart:math';
 import 'create_password_screen.dart';
+import '../services/email_verification_service.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
   final String email;
@@ -26,10 +26,10 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     (index) => FocusNode(),
   );
   
-  String? _generatedCode;
   bool _isResendEnabled = false;
   int _resendCountdown = 60;
   Timer? _resendTimer;
+  bool _isSending = false;
   
   @override
   void initState() {
@@ -50,27 +50,54 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     super.dispose();
   }
   
-  void _sendVerificationCode() {
-    // Generate a random 6-digit code
-    final random = Random();
-    _generatedCode = List.generate(6, (_) => random.nextInt(10)).join();
+  Future<void> _sendVerificationCode() async {
+    if (_isSending) return;
     
-    // In a real app, you would send this code via email
-    // For now, we'll just print it to the console for testing
-    print('Verification code sent: $_generatedCode');
+    setState(() => _isSending = true);
     
-    // Show SnackBar after the frame is built
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    try {
+      // Use the email verification service to generate and send code
+      await EmailVerificationService.instance.sendVerificationCode(widget.email);
+      
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Verification code sent to ${widget.email}\nCode: $_generatedCode (for testing)'),
-            duration: const Duration(seconds: 5),
-            backgroundColor: Colors.green,
-          ),
-        );
+        setState(() {
+          _isSending = false;
+        });
+        
+        // Show success message after the frame is built
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Verification code sent to ${widget.email}',
+                  // Note: In production, NEVER show the actual code
+                  // For testing: '\nCode: $code (for testing only)'
+                ),
+                duration: const Duration(seconds: 4),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+        });
       }
-    });
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isSending = false);
+        
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Failed to send verification code: $e'),
+                duration: const Duration(seconds: 4),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        });
+      }
+    }
   }
   
   void _startResendTimer() {
@@ -92,20 +119,20 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     });
   }
   
-  void _resendCode() {
-    if (_isResendEnabled) {
-      _sendVerificationCode();
-      _startResendTimer();
-      
+  Future<void> _resendCode() async {
+    if (_isResendEnabled && !_isSending) {
       // Clear all input fields
       for (var controller in _controllers) {
         controller.clear();
       }
       _focusNodes[0].requestFocus();
+      
+      await _sendVerificationCode();
+      _startResendTimer();
     }
   }
   
-  void _verifyCode() {
+  Future<void> _verifyCode() async {
     final enteredCode = _controllers.map((c) => c.text).join();
     
     if (enteredCode.length != 6) {
@@ -118,36 +145,74 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
       return;
     }
     
-    if (enteredCode == _generatedCode) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Email verified successfully!'),
-          backgroundColor: Colors.green,
-        ),
+    // Show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+    
+    try {
+      // Verify OTP code using Supabase Auth
+      // This will automatically sign in the user if successful
+      final isValid = await EmailVerificationService.instance.verifyCode(
+        widget.email,
+        enteredCode,
       );
       
-      // Navigate to create password screen
-      Future.delayed(const Duration(seconds: 1), () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CreatePasswordScreen(email: widget.email),
+      if (!mounted) return;
+      
+      // Dismiss loading indicator
+      Navigator.of(context).pop();
+      
+      if (isValid) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Email verified successfully! 🎉'),
+            backgroundColor: Colors.green,
           ),
         );
-      });
-    } else {
+        
+        // User is now signed in via Supabase OTP
+        // Navigate to create password screen to set permanent password
+        Future.delayed(const Duration(milliseconds: 500), () {
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CreatePasswordScreen(email: widget.email),
+              ),
+            );
+          }
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Invalid or expired verification code. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        
+        // Clear all fields and focus on first field
+        for (var controller in _controllers) {
+          controller.clear();
+        }
+        _focusNodes[0].requestFocus();
+      }
+    } catch (e) {
+      if (!mounted) return;
+      
+      // Dismiss loading indicator
+      Navigator.of(context).pop();
+      
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invalid verification code. Please try again.'),
+        SnackBar(
+          content: Text('Error verifying code: $e'),
           backgroundColor: Colors.red,
         ),
       );
-      
-      // Clear all fields and focus on first field
-      for (var controller in _controllers) {
-        controller.clear();
-      }
-      _focusNodes[0].requestFocus();
     }
   }
 

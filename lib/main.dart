@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 import 'screens/signup_screen.dart';
 import 'screens/signin_screen.dart';
+import 'services/supabase_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize Firebase
+  // Initialize Supabase
   try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    print('✅ Firebase initialized successfully');
+    await SupabaseService.initialize();
+    print('✅ Supabase initialized successfully');
   } catch (e) {
-    print('❌ Firebase initialization error: $e');
+    print('❌ Supabase initialization error: $e');
   }
   
   runApp(const MentalHealthApp());
