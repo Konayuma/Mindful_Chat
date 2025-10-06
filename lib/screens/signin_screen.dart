@@ -98,23 +98,31 @@ class _SignInScreenState extends State<SignInScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 27.0),
                 child: Column(
                   children: [
-                    const SizedBox(height: 46.5),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                     // Main content container
                     Container(
-                      width: 336,
-                      height: 688,
+                      width: double.infinity,
+                      constraints: BoxConstraints(
+                        maxWidth: 336,
+                        minHeight: MediaQuery.of(context).size.height * 0.7,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF0F3FB),
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          const SizedBox(height: 47.5),
+                          const SizedBox(height: 24),
                           // Brain illustration (smaller version)
                           Container(
-                            width: 123,
-                            height: 184,
+                            width: MediaQuery.of(context).size.width * 0.28,
+                            height: MediaQuery.of(context).size.height * 0.18,
+                            constraints: const BoxConstraints(
+                              maxWidth: 123,
+                              maxHeight: 184,
+                            ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(15),
                               child: Image.asset(
@@ -123,7 +131,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 32),
+                          const SizedBox(height: 24),
                           // Title
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 0),
@@ -154,127 +162,137 @@ class _SignInScreenState extends State<SignInScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 32),
+                          const SizedBox(height: 24),
                           // Email Input
-                          Container(
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: TextField(
-                              controller: _emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: InputDecoration(
-                                hintText: 'Email address',
-                                hintStyle: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.black.withOpacity(0.5),
-                                  fontFamily: 'Satoshi',
-                                ),
-                                border: InputBorder.none,
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 10,
-                                ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(30),
                               ),
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black,
-                                fontFamily: 'Satoshi',
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 32),
-                          // Password Input
-                          Container(
-                            height: 36,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: TextField(
-                              controller: _passwordController,
-                              obscureText: !_isPasswordVisible,
-                              decoration: InputDecoration(
-                                hintText: 'Password',
-                                hintStyle: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.black.withOpacity(0.5),
-                                  fontFamily: 'Satoshi',
-                                ),
-                                border: InputBorder.none,
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 8,
-                                ),
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _isPasswordVisible
-                                        ? Icons.visibility_outlined
-                                        : Icons.visibility_off_outlined,
-                                    size: 18,
+                              child: TextField(
+                                controller: _emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                  hintText: 'Email address',
+                                  hintStyle: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.normal,
                                     color: Colors.black.withOpacity(0.5),
+                                    fontFamily: 'Satoshi',
                                   ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _isPasswordVisible = !_isPasswordVisible;
-                                    });
-                                  },
+                                  border: InputBorder.none,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 10,
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.black,
+                                  fontFamily: 'Satoshi',
                                 ),
                               ),
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black,
-                                fontFamily: 'Satoshi',
-                              ),
-                              onSubmitted: (_) => _handleSignIn(),
                             ),
                           ),
-                          const SizedBox(height: 32),
-                          // Sign In Button
-                          SizedBox(
-                            width: 304,
-                            height: 44,
-                            child: ElevatedButton(
-                              onPressed: _isLoading ? null : _handleSignIn,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.black,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                elevation: 0,
+                          const SizedBox(height: 20),
+                          // Password Input
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(30),
                               ),
-                              child: _isLoading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.white,
+                              child: TextField(
+                                controller: _passwordController,
+                                obscureText: !_isPasswordVisible,
+                                decoration: InputDecoration(
+                                  hintText: 'Password',
+                                  hintStyle: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.black.withOpacity(0.5),
+                                    fontFamily: 'Satoshi',
+                                  ),
+                                  border: InputBorder.none,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 10,
+                                  ),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _isPasswordVisible
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
+                                      size: 18,
+                                      color: Colors.black.withOpacity(0.5),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isPasswordVisible = !_isPasswordVisible;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.black,
+                                  fontFamily: 'Satoshi',
+                                ),
+                                onSubmitted: (_) => _handleSignIn(),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          // Sign In Button
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: SizedBox(
+                              width: double.infinity,
+                              height: 44,
+                              child: ElevatedButton(
+                                onPressed: _isLoading ? null : _handleSignIn,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.black,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  elevation: 0,
+                                ),
+                                child: _isLoading
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor: AlwaysStoppedAnimation<Color>(
+                                            Colors.white,
+                                          ),
+                                        ),
+                                      )
+                                    : const Text(
+                                        'Sign In',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: 'Satoshi',
                                         ),
                                       ),
-                                    )
-                                  : const Text(
-                                      'Sign In',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: 'Satoshi',
-                                      ),
-                                    ),
+                              ),
                             ),
                           ),
+                          const SizedBox(height: 16),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 53),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                     // Bottom text
                     RichText(
                       text: TextSpan(
@@ -314,15 +332,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     const SizedBox(height: 39),
                   ],
                 ),
-              ),
-            ),
-            // Back button
-            Positioned(
-              top: 16,
-              left: 16,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () => Navigator.pop(context),
               ),
             ),
           ],

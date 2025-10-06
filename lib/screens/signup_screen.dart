@@ -18,23 +18,32 @@ class SignUpScreen extends StatelessWidget {
                 child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 64),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.04),
               // Main content container
               Container(
-                width: 336,
-                height: 688,
+                width: double.infinity,
+                constraints: BoxConstraints(
+                  maxWidth: 336,
+                  minHeight: MediaQuery.of(context).size.height * 0.7,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFF0F3FB),
                   borderRadius: BorderRadius.circular(30),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
+                    const SizedBox(height: 16),
                     // Brain illustration
                     Container(
-                      width: 199,
-                      height: 299,
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      constraints: const BoxConstraints(
+                        maxWidth: 199,
+                        maxHeight: 299,
+                      ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: Image.asset(
@@ -43,15 +52,15 @@ class SignUpScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 24),
                     // Main title
-                    const SizedBox(
-                      width: 304,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
                         'Start your mental wellness journey.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 32,
+                          fontSize: MediaQuery.of(context).size.height < 700 ? 24 : 32,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                           height: 1.2,
@@ -59,107 +68,106 @@ class SignUpScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 20),
                     // Subtitle
-                    const SizedBox(
-                      width: 227,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
                         'Support when you need it, where you are.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: MediaQuery.of(context).size.height < 700 ? 14 : 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                           fontFamily: 'Satoshi',
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 24),
                     // Google Sign Up Button
-                    SizedBox(
-                      width: 304,
-                      height: 38,
-                      child: ElevatedButton(
-                        onPressed: () => _showComingSoon(context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 38,
+                        child: ElevatedButton(
+                          onPressed: () => _showComingSoon(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                           ),
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: SvgPicture.asset(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SvgPicture.asset(
                                 'assets/images/signup/bfd0e4e619e8abf7e1aae3e4bf2ed5fe3620ef71.svg',
                                 width: 18,
                                 height: 18,
                               ),
-                            ),
-                            const SizedBox(width: 24),
-                            const Text(
-                              'Continue with Google',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Satoshi',
+                              const SizedBox(width: 12),
+                              const Text(
+                                'Continue with Google',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'Satoshi',
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 20),
                     // Email Sign Up Button
-                    SizedBox(
-                      width: 304,
-                      height: 38,
-                      child: ElevatedButton(
-                        onPressed: () => _navigateToEmailInput(context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 38,
+                        child: ElevatedButton(
+                          onPressed: () => _navigateToEmailInput(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                           ),
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: SvgPicture.asset(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SvgPicture.asset(
                                 'assets/images/signup/36100e792ff6512472ba62ec18bc3e16aab93fd0.svg',
                                 width: 18,
                                 height: 18,
                               ),
-                            ),
-                            const SizedBox(width: 24),
-                            const Text(
-                              'Continue with email',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Satoshi',
+                              const SizedBox(width: 12),
+                              const Text(
+                                'Continue with email',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'Satoshi',
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
-              const SizedBox(height: 53),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.04),
               // Bottom text
               RichText(
                 text: TextSpan(
@@ -187,7 +195,7 @@ class SignUpScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 39),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
             ],
           ),
         ),

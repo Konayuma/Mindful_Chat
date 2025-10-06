@@ -30,22 +30,30 @@ class _EmailInputScreenState extends State<EmailInputScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 27.0),
                 child: Column(
             children: [
-              const SizedBox(height: 53),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
               // Main content container
               Container(
-                width: 336,
+                width: double.infinity,
+                constraints: const BoxConstraints(
+                  maxWidth: 336,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFF0F3FB),
                   borderRadius: BorderRadius.circular(30),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 16),
                     // Brain illustration (smaller version)
                     Container(
-                      width: 127,
-                      height: 191,
+                      width: MediaQuery.of(context).size.width * 0.28,
+                      height: MediaQuery.of(context).size.height * 0.18,
+                      constraints: const BoxConstraints(
+                        maxWidth: 127,
+                        maxHeight: 191,
+                      ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: Image.asset(
@@ -54,7 +62,7 @@ class _EmailInputScreenState extends State<EmailInputScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 24),
                     // Title
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 14),
@@ -122,7 +130,7 @@ class _EmailInputScreenState extends State<EmailInputScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 24),
                     // Continue Button
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -150,10 +158,11 @@ class _EmailInputScreenState extends State<EmailInputScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
-              const SizedBox(height: 100),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.08),
               // Privacy policy and terms
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 36),
