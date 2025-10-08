@@ -58,6 +58,49 @@ class SupabaseDatabaseService {
     }
   }
 
+  /// Create user profile (call after sign up)
+  Future<void> createUserProfile({
+    required String userId,
+    required String email,
+    String? displayName,
+  }) async {
+    try {
+      await _client.from('users').insert({
+        'id': userId,
+        'email': email,
+        'display_name': displayName,
+        'created_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String(),
+        'last_active': DateTime.now().toIso8601String(),
+        'preferences': {},
+      });
+    } catch (e) {
+      // If user already exists, ignore the error
+      if (!e.toString().contains('duplicate key')) {
+        throw Exception('Failed to create user profile: $e');
+      }
+    }
+  }
+
+  /// Ensure user profile exists (upsert)
+  Future<void> ensureUserProfile({
+    required String userId,
+    required String email,
+    String? displayName,
+  }) async {
+    try {
+      await _client.from('users').upsert({
+        'id': userId,
+        'email': email,
+        'display_name': displayName,
+        'updated_at': DateTime.now().toIso8601String(),
+        'last_active': DateTime.now().toIso8601String(),
+      }, onConflict: 'id');
+    } catch (e) {
+      throw Exception('Failed to ensure user profile: $e');
+    }
+  }
+
   /// Update user's last active timestamp
   Future<void> updateLastActive(String userId) async {
     try {

@@ -8,7 +8,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- ============================================
 -- USERS TABLE
 -- ============================================
-CREATE TABLE public.users (
+CREATE TABLE IF NOT EXISTS public.users (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     email TEXT UNIQUE NOT NULL,
     display_name TEXT,
@@ -22,14 +22,17 @@ CREATE TABLE public.users (
 ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for users table
+DROP POLICY IF EXISTS "Users can view their own profile" ON public.users;
 CREATE POLICY "Users can view their own profile"
     ON public.users FOR SELECT
     USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Users can update their own profile" ON public.users;
 CREATE POLICY "Users can update their own profile"
     ON public.users FOR UPDATE
     USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Users can insert their own profile" ON public.users;
 CREATE POLICY "Users can insert their own profile"
     ON public.users FOR INSERT
     WITH CHECK (auth.uid() = id);
@@ -37,7 +40,7 @@ CREATE POLICY "Users can insert their own profile"
 -- ============================================
 -- CONVERSATIONS TABLE
 -- ============================================
-CREATE TABLE public.conversations (
+CREATE TABLE IF NOT EXISTS public.conversations (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
     title TEXT NOT NULL DEFAULT 'New Conversation',
@@ -50,18 +53,22 @@ CREATE TABLE public.conversations (
 ALTER TABLE public.conversations ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for conversations
+DROP POLICY IF EXISTS "Users can view their own conversations" ON public.conversations;
 CREATE POLICY "Users can view their own conversations"
     ON public.conversations FOR SELECT
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own conversations" ON public.conversations;
 CREATE POLICY "Users can create their own conversations"
     ON public.conversations FOR INSERT
     WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own conversations" ON public.conversations;
 CREATE POLICY "Users can update their own conversations"
     ON public.conversations FOR UPDATE
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own conversations" ON public.conversations;
 CREATE POLICY "Users can delete their own conversations"
     ON public.conversations FOR DELETE
     USING (auth.uid() = user_id);
@@ -69,7 +76,7 @@ CREATE POLICY "Users can delete their own conversations"
 -- ============================================
 -- MESSAGES TABLE
 -- ============================================
-CREATE TABLE public.messages (
+CREATE TABLE IF NOT EXISTS public.messages (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     conversation_id UUID NOT NULL REFERENCES public.conversations(id) ON DELETE CASCADE,
     content TEXT NOT NULL,
@@ -82,6 +89,7 @@ CREATE TABLE public.messages (
 ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for messages
+DROP POLICY IF EXISTS "Users can view messages in their conversations" ON public.messages;
 CREATE POLICY "Users can view messages in their conversations"
     ON public.messages FOR SELECT
     USING (
@@ -92,6 +100,7 @@ CREATE POLICY "Users can view messages in their conversations"
         )
     );
 
+DROP POLICY IF EXISTS "Users can create messages in their conversations" ON public.messages;
 CREATE POLICY "Users can create messages in their conversations"
     ON public.messages FOR INSERT
     WITH CHECK (
@@ -105,7 +114,7 @@ CREATE POLICY "Users can create messages in their conversations"
 -- ============================================
 -- MOOD ENTRIES TABLE
 -- ============================================
-CREATE TABLE public.mood_entries (
+CREATE TABLE IF NOT EXISTS public.mood_entries (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
     mood_level INTEGER NOT NULL CHECK (mood_level >= 1 AND mood_level <= 10),
@@ -118,18 +127,22 @@ CREATE TABLE public.mood_entries (
 ALTER TABLE public.mood_entries ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for mood_entries
+DROP POLICY IF EXISTS "Users can view their own mood entries" ON public.mood_entries;
 CREATE POLICY "Users can view their own mood entries"
     ON public.mood_entries FOR SELECT
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own mood entries" ON public.mood_entries;
 CREATE POLICY "Users can create their own mood entries"
     ON public.mood_entries FOR INSERT
     WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own mood entries" ON public.mood_entries;
 CREATE POLICY "Users can update their own mood entries"
     ON public.mood_entries FOR UPDATE
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own mood entries" ON public.mood_entries;
 CREATE POLICY "Users can delete their own mood entries"
     ON public.mood_entries FOR DELETE
     USING (auth.uid() = user_id);
@@ -137,7 +150,7 @@ CREATE POLICY "Users can delete their own mood entries"
 -- ============================================
 -- JOURNAL ENTRIES TABLE
 -- ============================================
-CREATE TABLE public.journal_entries (
+CREATE TABLE IF NOT EXISTS public.journal_entries (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
     title TEXT NOT NULL,
@@ -152,18 +165,22 @@ CREATE TABLE public.journal_entries (
 ALTER TABLE public.journal_entries ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for journal_entries
+DROP POLICY IF EXISTS "Users can view their own journal entries" ON public.journal_entries;
 CREATE POLICY "Users can view their own journal entries"
     ON public.journal_entries FOR SELECT
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own journal entries" ON public.journal_entries;
 CREATE POLICY "Users can create their own journal entries"
     ON public.journal_entries FOR INSERT
     WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own journal entries" ON public.journal_entries;
 CREATE POLICY "Users can update their own journal entries"
     ON public.journal_entries FOR UPDATE
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own journal entries" ON public.journal_entries;
 CREATE POLICY "Users can delete their own journal entries"
     ON public.journal_entries FOR DELETE
     USING (auth.uid() = user_id);
@@ -171,14 +188,14 @@ CREATE POLICY "Users can delete their own journal entries"
 -- ============================================
 -- INDEXES FOR PERFORMANCE
 -- ============================================
-CREATE INDEX idx_conversations_user_id ON public.conversations(user_id);
-CREATE INDEX idx_conversations_updated_at ON public.conversations(updated_at DESC);
-CREATE INDEX idx_messages_conversation_id ON public.messages(conversation_id);
-CREATE INDEX idx_messages_timestamp ON public.messages(timestamp);
-CREATE INDEX idx_mood_entries_user_id ON public.mood_entries(user_id);
-CREATE INDEX idx_mood_entries_timestamp ON public.mood_entries(timestamp DESC);
-CREATE INDEX idx_journal_entries_user_id ON public.journal_entries(user_id);
-CREATE INDEX idx_journal_entries_created_at ON public.journal_entries(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_conversations_user_id ON public.conversations(user_id);
+CREATE INDEX IF NOT EXISTS idx_conversations_updated_at ON public.conversations(updated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_messages_conversation_id ON public.messages(conversation_id);
+CREATE INDEX IF NOT EXISTS idx_messages_timestamp ON public.messages(timestamp);
+CREATE INDEX IF NOT EXISTS idx_mood_entries_user_id ON public.mood_entries(user_id);
+CREATE INDEX IF NOT EXISTS idx_mood_entries_timestamp ON public.mood_entries(timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_journal_entries_user_id ON public.journal_entries(user_id);
+CREATE INDEX IF NOT EXISTS idx_journal_entries_created_at ON public.journal_entries(created_at DESC);
 
 -- ============================================
 -- FUNCTIONS AND TRIGGERS
@@ -194,18 +211,21 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Trigger for users table
+DROP TRIGGER IF EXISTS update_users_updated_at ON public.users;
 CREATE TRIGGER update_users_updated_at
     BEFORE UPDATE ON public.users
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
 -- Trigger for conversations table
+DROP TRIGGER IF EXISTS update_conversations_updated_at ON public.conversations;
 CREATE TRIGGER update_conversations_updated_at
     BEFORE UPDATE ON public.conversations
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
 -- Trigger for journal_entries table
+DROP TRIGGER IF EXISTS update_journal_entries_updated_at ON public.journal_entries;
 CREATE TRIGGER update_journal_entries_updated_at
     BEFORE UPDATE ON public.journal_entries
     FOR EACH ROW
@@ -222,6 +242,7 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Trigger to create user profile on signup
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
     AFTER INSERT ON auth.users
     FOR EACH ROW
