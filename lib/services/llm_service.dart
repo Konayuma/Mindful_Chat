@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'api_service.dart';
 
 /// Enum representing available LLM models
@@ -22,7 +23,7 @@ enum LLMModel {
 /// Supports switching between custom SLM and Gemini API
 class LLMService {
   // Gemini API configuration
-  static const String _geminiApiKey = 'AIzaSyCutiFoAANsqE7x_GS80aU3q6uTHqGU4HY';
+  static String get _geminiApiKey => dotenv.env['GEMINI_API_KEY'] ?? '';
   static const String _geminiBaseUrl = 'https://generativelanguage.googleapis.com/v1beta/models';
   
   /// The currently selected model (defaults to custom SLM)
