@@ -148,6 +148,10 @@ class SignUpScreen extends StatelessWidget {
                                 'assets/images/signup/36100e792ff6512472ba62ec18bc3e16aab93fd0.svg',
                                 width: 18,
                                 height: 18,
+                                colorFilter: const ColorFilter.mode(
+                                  Colors.black,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                               const SizedBox(width: 12),
                               const Text(

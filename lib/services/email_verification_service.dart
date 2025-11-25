@@ -29,6 +29,8 @@ class EmailVerificationService {
       await _supabase.auth.signInWithOtp(
         email: email.toLowerCase(),
         emailRedirectTo: null, // No redirect needed for OTP
+        shouldCreateUser: true, // Create user if doesn't exist (sign up)
+        data: {'otp_type': 'signup'}, // Mark as signup OTP
       );
       
       print('✅ OTP sent to $email via Supabase');

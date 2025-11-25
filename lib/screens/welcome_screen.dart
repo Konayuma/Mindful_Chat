@@ -17,7 +17,7 @@ class WelcomeScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: 35.5),
                 // Brain illustration
-                Container(
+                SizedBox(
                   width: 226,
                   height: 339,
                   child: ClipRRect(

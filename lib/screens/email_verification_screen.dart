@@ -241,7 +241,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   children: [
                     const SizedBox(height: 2),
                     // Brain illustration (smaller version)
-                    Container(
+                    SizedBox(
                       width: 127,
                       height: 191,
                       child: ClipRRect(

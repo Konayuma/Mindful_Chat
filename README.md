@@ -4,6 +4,7 @@ A Flutter mobile application designed to support mental health and wellness. Thi
 
 ## ✨ Features
 
+### Core Features
 - **AI Chat Support**: Conversational AI assistant for mental health support
 - **User Authentication**: Secure email/password authentication with Supabase
 - **Mood Tracker**: Track your daily mood and emotional well-being
@@ -12,6 +13,16 @@ A Flutter mobile application designed to support mental health and wellness. Thi
 - **Real-time Sync**: Access your data across devices with real-time updates
 - **Row Level Security**: Your data is protected and only accessible by you
 
+### ✨ NEW: She-Inspires Features (Just Integrated!)
+- **Daily Affirmations** 🌟: Start your day with positive mental health affirmations
+- **Bookmarks/Favorites** 💾: Save and organize affirmations, messages, and journal entries
+- **Enhanced Journal** 📓: Grid/list view, bookmarking, and improved editor
+- **Daily Notifications** 🔔: Get reminded with daily affirmations at your preferred time
+- **Share & Copy** 📤: Easily share inspiration with others
+- **Search & Filter** 🔍: Find saved content and affirmations quickly
+
+**See [INTEGRATION_COMPLETE.md](./INTEGRATION_COMPLETE.md) for setup instructions!**
+
 ## 🔧 Tech Stack
 
 - **Frontend**: Flutter 3.6.0+
@@ -19,6 +30,9 @@ A Flutter mobile application designed to support mental health and wellness. Thi
 - **Authentication**: Supabase Auth
 - **Database**: PostgreSQL with Row Level Security (RLS)
 - **Real-time**: Supabase Real-time subscriptions
+- **Notifications**: Flutter Local Notifications
+- **Sharing**: share_plus package
+- **Storage**: SharedPreferences for offline support
 
 ## 🚀 Quick Start
 
@@ -162,11 +176,20 @@ MIGRATION_COMPLETE.md                       # Migration details
 
 ## 📚 Documentation
 
+### Getting Started
 - **`QUICK_START.md`** - Fast track to running the app
-- **`MIGRATION_COMPLETE.md`** - Complete migration details and features
+- **`INTEGRATION_COMPLETE.md`** - NEW: She-Inspires features setup (5 minutes)
+- **`SHE_INSPIRES_QUICKSTART.md`** - Quick guide for new features
+
+### Database & Migration
+- **`supabase_schema.sql`** - Main database schema
+- **`she_inspires_schema.sql`** - NEW: Affirmations & bookmarks schema
+- **`MIGRATION_COMPLETE.md`** - Complete migration details
 - **`SUPABASE_MIGRATION.md`** - Full migration guide
-- **`SUPABASE_QUICKSTART.md`** - Supabase quick reference
-- **`supabase_schema.sql`** - Database schema with comments
+
+### Feature Documentation
+- **`SHE_INSPIRES_INTEGRATION.md`** - NEW: Complete integration details
+- **`FEATURE_INTEGRATION_PRD.md`** - Product requirements document
 
 ## 🧪 Development
 

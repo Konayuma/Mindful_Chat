@@ -202,15 +202,18 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
   }
 
   Future<void> _checkServerConnection() async {
+    if (!mounted) return;
     setState(() => _isCheckingConnection = true);
     
     try {
       final health = await ApiService.checkHealth();
+      if (!mounted) return;
       setState(() {
         _isConnected = health['status'] == 'healthy';
         _isCheckingConnection = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _isConnected = false;
         _isCheckingConnection = false;
@@ -705,7 +708,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
                     ),
                   ),
                 );
-              }).toList(),
+              }),
               const SizedBox(height: 10),
             ],
           ),

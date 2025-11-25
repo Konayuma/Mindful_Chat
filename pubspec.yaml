@@ -41,6 +41,13 @@ dependencies:
   fluttertoast: ^8.2.4
   video_player: ^2.8.2
   shared_preferences: ^2.2.2
+  
+  # She-Inspires features
+  share_plus: ^7.2.1  # Share affirmations and content
+  flutter_local_notifications: ^17.0.0  # Daily affirmation notifications
+  timezone: ^0.9.2  # Scheduling notifications
+  permission_handler: ^11.1.0  # Notification permissions
+  intl: ^0.19.0  # Date formatting
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +77,7 @@ flutter:
     - assets/images/
     - assets/images/signup/
     - assets/images/onboarding/
+    - assets/data/
     - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see

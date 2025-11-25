@@ -177,7 +177,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                 child: Column(
                   children: [
                     // Brain illustration (smaller version)
-                    Container(
+                    SizedBox(
                       width: 127,
                       height: 191,
                       child: ClipRRect(
