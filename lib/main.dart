@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/chat_screen.dart';
+import 'screens/home_screen.dart';
 import 'screens/video_splash_screen.dart';
 import 'services/supabase_service.dart';
 import 'services/supabase_auth_service.dart';
@@ -28,10 +29,10 @@ void main() async {
   
   // Initialize Supabase
   try {
-    await SupabaseService.initialize();
-    print('✅ Supabase initialized successfully');
+    // await SupabaseService.initialize(); // Temporarily disabled for UI testing
+    debugPrint('ℹ️ Supabase initialization temporarily disabled for UI testing');
   } catch (e) {
-    print('❌ Supabase initialization error: $e');
+    debugPrint('❌ Supabase initialization error: $e');
   }
   
   // Initialize theme service
@@ -123,15 +124,22 @@ class AuthChecker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Temporarily bypass authentication for UI testing
+    debugPrint('ℹ️ Bypassing authentication for UI testing - showing home screen');
+    return const HomeScreen();
+    
+    // Original authentication logic (commented out for testing)
+    /*
     // Check if user session exists (Supabase handles persistence automatically)
     final isSignedIn = SupabaseAuthService.instance.isSignedIn;
     
     if (isSignedIn) {
-      print('✅ User session found - navigating to chat');
-      return const ChatScreen();
+      debugPrint('✅ User session found - navigating to home');
+      return const HomeScreen();
     } else {
-      print('ℹ️ No user session - showing welcome screen');
+      debugPrint('ℹ️ No user session - showing welcome screen');
       return const WelcomeScreen();
     }
+    */
   }
 }

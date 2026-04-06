@@ -14,7 +14,7 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
 
   void _goToChat() {
     // TODO: Save notification preference to user profile
-    print('Notifications enabled: $_notificationsEnabled');
+    debugPrint('Notifications enabled: $_notificationsEnabled');
 
     // Navigate to chat screen
     Navigator.pushReplacement(
@@ -130,9 +130,9 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
                                       });
                                     },
                                     activeColor: const Color(0xFF2D9CDB),
-                                    activeTrackColor: const Color(0xFF2D9CDB).withOpacity(0.5),
+                                    activeTrackColor: const Color(0xFF2D9CDB).withValues(alpha: 0.5),
                                     inactiveThumbColor: Colors.grey,
-                                    inactiveTrackColor: Colors.grey.withOpacity(0.3),
+                                    inactiveTrackColor: Colors.grey.withValues(alpha: 0.3),
                                   ),
                                 ),
                               ],

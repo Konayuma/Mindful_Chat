@@ -168,7 +168,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
           _isLoading = false;
         });
 
-        print('✅ Loaded ${_messages.length} messages');
+        debugPrint('✅ Loaded ${_messages.length} messages');
         
         // Scroll to bottom after messages loaded
         WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
@@ -185,7 +185,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
         }
       }
     } catch (e) {
-      print('❌ Error loading messages: $e');
+      debugPrint('❌ Error loading messages: $e');
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -221,18 +221,12 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
   /// Sanitize text by removing markdown formatting (optimized)
   Future<String> _sanitizeTextAsync(String text) async {
     // Run text sanitization off the main thread
-    return Future.microtask(() => _performSanitization(text));
-  }
-
-  /// Synchronous sanitization (for short text)
-  String _sanitizeText(String text) {
-    return _performSanitization(text);
+    return Future.microtask(() => _sanitizeText(text));
   }
 
   /// Actual sanitization logic
-  String _performSanitization(String text) {
-    print('🔧 Sanitizing text (length: ${text.length})');
-    print('📝 Original text: ${text.substring(0, text.length > 100 ? 100 : text.length)}...');
+  String _sanitizeText(String text) {
+    debugPrint('🔧 Sanitizing text (length: ${text.length})');
     
     String sanitized = text;
     
@@ -348,17 +342,16 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
               ElevatedButton.icon(
                 onPressed: () async {
                   await Clipboard.setData(ClipboardData(text: text));
-                  if (mounted) {
-                    Navigator.pop(context);
-                    Fluttertoast.showToast(
-                      msg: "Message copied to clipboard",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      backgroundColor: const Color(0xFF8FEC95),
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
-                  }
+                  if (!context.mounted) return;
+                  Navigator.pop(context);
+                  Fluttertoast.showToast(
+                    msg: "Message copied to clipboard",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    backgroundColor: const Color(0xFF8FEC95),
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
                 },
                 icon: const Icon(Icons.copy, color: Colors.white),
                 label: const Text(
@@ -450,10 +443,10 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
                 : userMessage,
           );
           _currentConversationId = conversation['id'] as String;
-          print('✅ Created conversation: $_currentConversationId with title: ${conversation['title']}');
+          debugPrint('✅ Created conversation: $_currentConversationId with title: ${conversation['title']}');
         }
       } catch (e) {
-        print('❌ Error creating conversation: $e');
+        debugPrint('❌ Error creating conversation: $e');
       }
     }
 
@@ -477,7 +470,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
           isUserMessage: true,
         );
       } catch (e) {
-        print('Error saving user message: $e');
+        debugPrint('Error saving user message: $e');
       }
     }
 
@@ -488,19 +481,19 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
       // Use LLM service to route to selected model
       LLMService.setModel(_selectedModel);
       
-      // Build context asynchronously
-      final context = await _buildMessageContext();
+      // Build context (synchronous now as it just formats messages)
+      final chatContext = await _buildMessageContext();
       
       // Get response from API
       final response = await LLMService.sendMessage(
         userMessage,
-        context: context.isNotEmpty ? context : null,
+        context: chatContext.isNotEmpty ? chatContext : null,
       );
 
       // Sanitize response asynchronously for long text
       final sanitizedResponse = response.trim().length > 100
           ? await _sanitizeTextAsync(response.trim())
-          : _performSanitization(response.trim());
+          : _sanitizeText(response.trim());
 
       // Update UI after processing
       if (mounted) {
@@ -524,7 +517,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
               isUserMessage: false,
             );
           } catch (e) {
-            print('Error saving AI message: $e');
+            debugPrint('Error saving AI message: $e');
           }
         }
       }

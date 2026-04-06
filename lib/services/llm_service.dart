@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'api_service.dart';
 
@@ -277,8 +278,8 @@ If a question is outside your scope, respond with:
       parts.add({'text': systemPrompt});
       parts.add({'text': 'User: $message'});
       
-      print('🔵 Sending to Gemini: $message');
-      print('🔵 Context messages: ${context?.length ?? 0}');
+      debugPrint('🔵 Sending to Gemini: $message');
+      debugPrint('🔵 Context messages: ${context?.length ?? 0}');
       
       final requestBody = {
         'contents': [
@@ -332,7 +333,7 @@ If a question is outside your scope, respond with:
         if (data['promptFeedback'] != null) {
           final promptFeedback = data['promptFeedback'] as Map<String, dynamic>;
           if (promptFeedback['blockReason'] != null) {
-            print('⚠️ Gemini blocked prompt: ${promptFeedback['blockReason']}');
+            debugPrint('⚠️ Gemini blocked prompt: ${promptFeedback['blockReason']}');
             return _getOutOfScopeResponse();
           }
         }
@@ -344,51 +345,51 @@ If a question is outside your scope, respond with:
           
           // Check if this candidate was blocked
           if (candidate['finishReason'] == 'SAFETY') {
-            print('⚠️ Gemini response blocked by safety filter');
+            debugPrint('⚠️ Gemini response blocked by safety filter');
             return _getOutOfScopeResponse();
           }
           
           final content = candidate['content'];
           if (content == null) {
-            print('⚠️ Gemini returned null content');
+            debugPrint('⚠️ Gemini returned null content');
             return "I apologize, but I couldn't generate a proper response. Please try rephrasing your question about mental health or wellbeing.";
           }
           
           final parts = content['parts'] as List?;
           if (parts == null || parts.isEmpty) {
-            print('⚠️ Gemini returned no text parts');
+            debugPrint('⚠️ Gemini returned no text parts');
             return "I apologize, but I couldn't generate a proper response. Please try rephrasing your question about mental health or wellbeing.";
           }
           
           final generatedText = parts[0]['text'] as String?;
           if (generatedText == null || generatedText.isEmpty) {
-            print('⚠️ Gemini returned empty text');
+            debugPrint('⚠️ Gemini returned empty text');
             return "I apologize, but I couldn't generate a proper response. Please try rephrasing your question about mental health or wellbeing.";
           }
             
             // Additional safety check: Verify response is mental health focused
             if (_isResponseOffTopic(generatedText)) {
-              print('⚠️ Gemini response deemed off-topic by guardrails');
+              debugPrint('⚠️ Gemini response deemed off-topic by guardrails');
               return _getOutOfScopeResponse();
             }
             
-            print('✅ Gemini response: ${generatedText.substring(0, generatedText.length > 100 ? 100 : generatedText.length)}...');
+            debugPrint('✅ Gemini response: ${generatedText.substring(0, generatedText.length > 100 ? 100 : generatedText.length)}...');
             return generatedText;
           }
         
-        print('⚠️ Gemini API response missing expected fields: $data');
+        debugPrint('⚠️ Gemini API response missing expected fields: $data');
         return "I apologize, but I couldn't generate a proper response. Please try again.";
       } else if (response.statusCode == 429) {
         throw Exception('API rate limit reached. Please try again in a moment.');
       } else if (response.statusCode == 400) {
         final error = jsonDecode(response.body);
         final errorMessage = error['error']?['message'] ?? 'Unknown error';
-        print('⚠️ Gemini 400 error: $errorMessage');
-        print('⚠️ Full error response: ${response.body}');
+        debugPrint('⚠️ Gemini 400 error: $errorMessage');
+        debugPrint('⚠️ Full error response: ${response.body}');
         throw Exception('Invalid request: $errorMessage');
       } else {
-        print('⚠️ Gemini API error ${response.statusCode}');
-        print('⚠️ Response body: ${response.body}');
+        debugPrint('⚠️ Gemini API error ${response.statusCode}');
+        debugPrint('⚠️ Response body: ${response.body}');
         throw Exception('Gemini API returned ${response.statusCode}: ${response.body}');
       }
     } on SocketException {

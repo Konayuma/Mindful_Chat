@@ -112,7 +112,7 @@ class _EmailInputScreenState extends State<EmailInputScreen> {
                             hintStyle: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.normal,
-                              color: Colors.black.withOpacity(0.5),
+                              color: Colors.black.withValues(alpha: 0.5),
                               fontFamily: 'Satoshi',
                             ),
                             border: InputBorder.none,

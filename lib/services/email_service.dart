@@ -23,9 +23,9 @@ class EmailService {
     required String code,
   }) async {
     if (_apiKey == null || _apiKey!.isEmpty) {
-      print('⚠️ RESEND_API_KEY not found in .env file');
-      print('📧 Email would be sent to: $toEmail');
-      print('🔐 Verification code: $code');
+      debugPrint('⚠️ RESEND_API_KEY not found in .env file');
+      debugPrint('📧 Email would be sent to: $toEmail');
+      debugPrint('🔐 Verification code: $code');
       return false;
     }
 
@@ -45,15 +45,15 @@ class EmailService {
       );
 
       if (response.statusCode == 200) {
-        print('✅ Verification email sent to $toEmail');
+        debugPrint('✅ Verification email sent to $toEmail');
         return true;
       } else {
-        print('❌ Failed to send email: ${response.statusCode}');
-        print('Response: ${response.body}');
+        debugPrint('❌ Failed to send email: ${response.statusCode}');
+        debugPrint('Response: ${response.body}');
         return false;
       }
     } catch (e) {
-      print('❌ Error sending email: $e');
+      debugPrint('❌ Error sending email: $e');
       return false;
     }
   }
@@ -64,7 +64,7 @@ class EmailService {
     required String userName,
   }) async {
     if (_apiKey == null || _apiKey!.isEmpty) {
-      print('⚠️ RESEND_API_KEY not found - skipping welcome email');
+      debugPrint('⚠️ RESEND_API_KEY not found - skipping welcome email');
       return false;
     }
 
@@ -85,7 +85,7 @@ class EmailService {
 
       return response.statusCode == 200;
     } catch (e) {
-      print('❌ Error sending welcome email: $e');
+      debugPrint('❌ Error sending welcome email: $e');
       return false;
     }
   }
@@ -96,7 +96,7 @@ class EmailService {
     required String resetCode,
   }) async {
     if (_apiKey == null || _apiKey!.isEmpty) {
-      print('⚠️ RESEND_API_KEY not found - skipping password reset email');
+      debugPrint('⚠️ RESEND_API_KEY not found - skipping password reset email');
       return false;
     }
 
@@ -117,7 +117,7 @@ class EmailService {
 
       return response.statusCode == 200;
     } catch (e) {
-      print('❌ Error sending password reset email: $e');
+      debugPrint('❌ Error sending password reset email: $e');
       return false;
     }
   }

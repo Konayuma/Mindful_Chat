@@ -177,7 +177,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                 child: Column(
                   children: [
                     // Brain illustration (smaller version)
-                    Container(
+                    SizedBox(
                       width: 127,
                       height: 191,
                       child: ClipRRect(
@@ -238,7 +238,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                             hintStyle: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.normal,
-                              color: Colors.black.withOpacity(0.5),
+                              color: Colors.black.withValues(alpha: 0.5),
                               fontFamily: 'Satoshi',
                             ),
                             border: InputBorder.none,
@@ -252,7 +252,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                                     ? Icons.visibility_outlined
                                     : Icons.visibility_off_outlined,
                                 size: 18,
-                                color: Colors.black.withOpacity(0.5),
+                                color: Colors.black.withValues(alpha: 0.5),
                               ),
                               onPressed: () {
                                 setState(() {
@@ -288,7 +288,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                             hintStyle: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.normal,
-                              color: Colors.black.withOpacity(0.5),
+                              color: Colors.black.withValues(alpha: 0.5),
                               fontFamily: 'Satoshi',
                             ),
                             border: InputBorder.none,
@@ -302,7 +302,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                                     ? Icons.visibility_outlined
                                     : Icons.visibility_off_outlined,
                                 size: 18,
-                                color: Colors.black.withOpacity(0.5),
+                                color: Colors.black.withValues(alpha: 0.5),
                               ),
                               onPressed: () {
                                 setState(() {
