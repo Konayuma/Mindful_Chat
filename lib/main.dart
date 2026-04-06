@@ -4,9 +4,15 @@ import 'screens/welcome_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/video_splash_screen.dart';
+import 'screens/affirmation_screen.dart';
+import 'screens/bookmarks_screen.dart';
+import 'screens/journal_screen.dart';
+import 'screens/personalization_wizard_screen.dart';
 import 'services/supabase_service.dart';
 import 'services/supabase_auth_service.dart';
 import 'services/theme_service.dart';
+import 'services/notification_service.dart';
+import 'services/user_preferences_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +43,9 @@ void main() async {
   
   // Initialize theme service
   await ThemeService().initialize();
+  
+  // Initialize notification service
+  await NotificationService().initialize();
   
   runApp(const MentalHealthApp());
 }
@@ -114,15 +123,24 @@ class _MentalHealthAppState extends State<MentalHealthApp> {
       home: VideoSplashScreen(
         nextScreen: const AuthChecker(),
       ),
+      // Named routes for She-Inspires features
+      routes: {
+        '/home': (context) => const HomeScreen(),
+        '/chat': (context) => const ChatScreen(),
+        '/affirmation': (context) => const AffirmationScreen(),
+        '/bookmarks': (context) => const BookmarksScreen(),
+        '/journal': (context) => const JournalScreen(),
+      },
     );
   }
 }
 
 /// Check if user is already signed in (data persistence)
-class AuthChecker extends StatelessWidget {
+class AuthChecker extends StatefulWidget {
   const AuthChecker({super.key});
 
   @override
+<<<<<<< HEAD
   Widget build(BuildContext context) {
     // Temporarily bypass authentication for UI testing
     debugPrint('ℹ️ Bypassing authentication for UI testing - showing home screen');
@@ -141,5 +159,69 @@ class AuthChecker extends StatelessWidget {
       return const WelcomeScreen();
     }
     */
+=======
+  State<AuthChecker> createState() => _AuthCheckerState();
+}
+
+class _AuthCheckerState extends State<AuthChecker> {
+  bool _isLoading = true;
+  bool _needsOnboarding = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkOnboardingStatus();
+  }
+
+  Future<void> _checkOnboardingStatus() async {
+    final isSignedIn = SupabaseAuthService.instance.isSignedIn;
+    
+    if (isSignedIn) {
+      // Check if user has completed onboarding
+      final prefsService = UserPreferencesService();
+      final needsOnboarding = !(await prefsService.isOnboardingCompleted());
+      
+      if (mounted) {
+        setState(() {
+          _needsOnboarding = needsOnboarding;
+          _isLoading = false;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF8FEC95)),
+          ),
+        ),
+      );
+    }
+
+    final isSignedIn = SupabaseAuthService.instance.isSignedIn;
+    
+    if (!isSignedIn) {
+      print('ℹ️ No user session - showing welcome screen');
+      return const WelcomeScreen();
+    }
+    
+    if (_needsOnboarding) {
+      print('ℹ️ User needs onboarding - showing wizard');
+      return const PersonalizationWizardScreen();
+    }
+    
+    print('✅ User session found and onboarding complete - navigating to home');
+    return const HomeScreen();
+>>>>>>> df388ed70c9c6c011ad0cfb29d2acd17f5106ae9
   }
 }

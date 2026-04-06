@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'chat_screen.dart';
+import 'home_screen.dart';
 
 class NotificationPreferencesScreen extends StatefulWidget {
   const NotificationPreferencesScreen({super.key});
@@ -16,11 +16,11 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
     // TODO: Save notification preference to user profile
     debugPrint('Notifications enabled: $_notificationsEnabled');
 
-    // Navigate to chat screen
+    // Navigate to home screen
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const ChatScreen(),
+        builder: (context) => const HomeScreen(),
       ),
     );
   }
@@ -129,8 +129,13 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
                                         _notificationsEnabled = value;
                                       });
                                     },
+<<<<<<< HEAD
                                     activeColor: const Color(0xFF2D9CDB),
                                     activeTrackColor: const Color(0xFF2D9CDB).withValues(alpha: 0.5),
+=======
+                                    activeThumbColor: const Color(0xFF2D9CDB),
+                                    activeTrackColor: const Color(0xFF2D9CDB).withOpacity(0.5),
+>>>>>>> df388ed70c9c6c011ad0cfb29d2acd17f5106ae9
                                     inactiveThumbColor: Colors.grey,
                                     inactiveTrackColor: Colors.grey.withValues(alpha: 0.3),
                                   ),

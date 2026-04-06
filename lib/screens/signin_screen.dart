@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import '../services/supabase_auth_service.dart';
-import 'chat_screen.dart';
+import 'home_screen.dart';
 import 'signup_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -65,11 +65,11 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         );
 
-        // Navigate to chat screen
+        // Navigate to home screen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const ChatScreen(),
+            builder: (context) => const HomeScreen(),
           ),
         );
       }

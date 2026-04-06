@@ -19,6 +19,9 @@ class SupabaseAuthService {
   /// Get current user
   User? get currentUser => _auth.currentUser;
 
+  /// Get current user id
+  String? get currentUserId => currentUser?.id;
+
   /// Check if user is signed in
   bool get isSignedIn => currentUser != null;
 
