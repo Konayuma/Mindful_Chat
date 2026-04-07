@@ -1,10 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-<<<<<<< HEAD
 import 'package:flutter/foundation.dart';
-=======
-import 'package:flutter/services.dart' show rootBundle;
->>>>>>> df388ed70c9c6c011ad0cfb29d2acd17f5106ae9
 
 /// Main Supabase client singleton
 class SupabaseService {
@@ -30,47 +26,19 @@ class SupabaseService {
   /// Initialize Supabase
   static Future<void> initialize() async {
     try {
-<<<<<<< HEAD
       await dotenv.load(fileName: '.env');
     } catch (e) {
       debugPrint('⚠️ Could not load .env file: $e');
       // Continue with default values for development
-=======
-      // Try to load from assets first (works on all platforms)
-      String envContent = await rootBundle.loadString('.env');
-      // Parse the env file manually
-      final lines = envContent.split('\n');
-      for (String line in lines) {
-        if (line.isNotEmpty && !line.startsWith('#')) {
-          final parts = line.split('=');
-          if (parts.length == 2) {
-            dotenv.env[parts[0].trim()] = parts[1].trim();
-          }
-        }
-      }
-    } catch (e) {
-      print('⚠️ Warning: Could not load .env from assets: $e');
-      try {
-        // Fall back to dotenv loading from file system
-        await dotenv.load(fileName: '.env');
-      } catch (e2) {
-        print('⚠️ Warning: Could not load .env file: $e2');
-      }
->>>>>>> df388ed70c9c6c011ad0cfb29d2acd17f5106ae9
     }
     
     final supabaseUrl = dotenv.env['SUPABASE_URL'] ?? 'https://your-project.supabase.co';
     final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? 'your-anon-key-here';
 
-<<<<<<< HEAD
     if (supabaseUrl == 'https://your-project.supabase.co' || supabaseAnonKey == 'your-anon-key-here') {
       debugPrint('❌ Supabase credentials not configured. Please update your .env file with your Supabase project details.');
       debugPrint('📝 Copy .env.example to .env and add your credentials from https://app.supabase.com');
       throw Exception('Supabase credentials not configured. Please update .env file with your project details.');
-=======
-    if (supabaseUrl == null || supabaseAnonKey == null) {
-      throw Exception('Supabase credentials not found in .env file. Please ensure SUPABASE_URL and SUPABASE_ANON_KEY are set.');
->>>>>>> df388ed70c9c6c011ad0cfb29d2acd17f5106ae9
     }
 
     try {

@@ -2,6 +2,69 @@
 
 All notable changes to the Mindful Chat project will be documented in this file.
 
+## [2025-04-07] - Version 1.1.0
+
+### Major New Features
+- **Complete Screen Suite**: Added all major screens for comprehensive mental health app experience
+- **Breathing Exercise Screen**: Interactive breathing exercises with animated visual feedback and customizable cycles
+- **Meditation Screen**: Guided meditation sessions with categories, duration options, and beautiful UI
+- **Journal Screen**: Full-featured journaling with mood tracking, writing interface, and entry management
+- **Mood Check-in Screen**: Multi-step mood assessment with emoji selection and feelings tracking
+- **Enhanced Home Screen**: Improved navigation, animations, and full bottom navigation support
+
+### Navigation & Routing
+- **Fixed Navigation State**: Resolved navigation bug where only 2 of 5 bottom nav items worked correctly
+- **Complete Route System**: Added named routes for all major screens (`/breathing`, `/meditation`, `/journal`, `/mood-checkin`, `/crisis`, `/articles`)
+- **Profile Integration**: Profile screen now accessible from both bottom nav and top nav
+- **Resources Hub**: Centralized resources screen with meditation, breathing, crisis support, and articles
+
+### UI/UX Improvements
+- **Animated Interactions**: Added smooth animations, transitions, and micro-interactions throughout
+- **Enhanced Home Screen**: 
+  - Animated breathing circle in add button
+  - Improved card hover states and transitions
+  - Better visual hierarchy and spacing
+  - Mount checks for safe navigation
+- **Responsive Design**: All screens properly adapt to different screen sizes
+- **Dark Mode Enhancement**: Consistent dark theme across all new screens
+
+### Technical Improvements
+- **Code Quality**: Added proper error handling, mount checks, and controller disposal
+- **Performance**: Optimized animations and reduced unnecessary rebuilds
+- **Architecture**: Clean separation of concerns with dedicated screen files
+- **Merge Conflict Resolution**: Fixed all git merge conflicts in main.dart and home_screen.dart
+
+### Screen Features
+- **Breathing Exercise**:
+  - 4-2-4-2 breathing pattern (inhale-hold-exhale-rest)
+  - Customizable cycle count
+  - Visual breathing animation with progress tracking
+  - Completion dialog with option to continue
+  
+- **Meditation**:
+  - 6 different meditation categories
+  - Session cards with duration and difficulty
+  - Animated gradient background
+  - Category filtering system
+  
+- **Journal**:
+  - Mood selection with 6 emotion types
+  - Rich text entry with title and content
+  - Entry history with mood indicators
+  - Floating action button with animation
+  
+- **Mood Check-in**:
+  - 3-step process (mood → feelings → notes)
+  - Visual mood selection with emojis
+  - Multi-select feelings chips
+  - Progress indicator
+
+### Bug Fixes
+- **Navigation Crash**: Fixed app crash when accessing Resources, Profile, or Add tabs
+- **Merge Conflicts**: Resolved all git merge conflicts in core files
+- **Memory Leaks**: Added proper controller disposal in all animation controllers
+- **Safe Navigation**: Added mount checks before all navigation operations
+
 ## [2025-04-07] - Version 1.0.1
 
 ### Fixed

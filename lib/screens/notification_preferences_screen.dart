@@ -129,13 +129,8 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
                                         _notificationsEnabled = value;
                                       });
                                     },
-<<<<<<< HEAD
-                                    activeColor: const Color(0xFF2D9CDB),
-                                    activeTrackColor: const Color(0xFF2D9CDB).withValues(alpha: 0.5),
-=======
                                     activeThumbColor: const Color(0xFF2D9CDB),
-                                    activeTrackColor: const Color(0xFF2D9CDB).withOpacity(0.5),
->>>>>>> df388ed70c9c6c011ad0cfb29d2acd17f5106ae9
+                                    activeTrackColor: const Color(0xFF2D9CDB).withValues(alpha: 0.5),
                                     inactiveThumbColor: Colors.grey,
                                     inactiveTrackColor: Colors.grey.withValues(alpha: 0.3),
                                   ),
